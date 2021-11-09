@@ -11,10 +11,11 @@ import { VoiceController } from './voice/voice.controller';
 import { ScriptController } from './script/script.controller';
 import { UserService } from './user/user.service';
 import { ScriptService } from './script/script.service';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [PrismaModule, ScriptModule, VoiceModule, UserModule],
   controllers: [AppController, UserController, VoiceController, ScriptController],
-  providers: [AppService, UserService, VoiceService, ScriptService],
+  providers: [AppService, PrismaService, UserService, VoiceService, ScriptService],
 })
 export class AppModule {}
