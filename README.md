@@ -1,4 +1,4 @@
-## Glovoice | 글로보이스
+## Project name : Glovoice | 글로보이스
 - 소개: 음성 클라우드 소싱 어플리케이션
 
 ## 개발 기간
