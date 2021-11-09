@@ -1,11 +1,167 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["debian-openssl-1.1.x"]
+}
+
+model Voice {
+    id	                Int       @default(autoincrement()) @id
+    fileSize	          Decimal   @db.Decimal(11,3)               
+    url	                String    @db.VarChar(500) 
+    user	              User?     @relation(fields: [userId], references: [id])       
+    userId	            Int?           
+    sentence            Sentence? @relation(fields: [sentenceId], references: [id])
+    sentenceId          Int?      
+    dateOfCreated       DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated       DateTime? @db.Timestamptz(3) @updatedAt
+    voiceDownloadStatus VoiceDownloadStatus[]
+    voiceVeriftyStatus  VoiceVeriftyStatus[]
+
+    @@map("voice")
+}
+
+model  VoiceDownloadStatus {
+    id      	    Int       @default(autoincrement()) @id
+    voice	        Voice     @relation(fields: [voiceId], references: [id])
+    voiceId	      Int       
+    downloadCount	Int       @default(0)    
+    client        Client    @relation(fields: [clientId], references:[id])
+    clientId      Int      
+    dateOfCreated	DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated	DateTime? @db.Timestamptz(3) @updatedAt
+    
+    @@map("voice_download_status")
+}
+
+model VoiceVeriftyStatus {
+    id      	    Int       @default(autoincrement()) @id
+    voice	        Voice     @relation(fields: [voiceId], references: [id])
+    voiceId	      Int       @unique //수정
+    verifyStatus 	Status    @default(NONE) //수정
+    user	        User      @relation(fields: [userId], references: [id])       
+    userId	      Int           
+    playCount	    Int       @default(1)    // 수정
+    dateOfCreated	DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated	DateTime? @db.Timestamptz(3) @updatedAt
+    
+    @@map("voice_verifty_status")
+}
+
+model Script {
+    id	          Int            @default(autoincrement()) @id
+    title	        String         @db.VarChar(50) @unique
+    url	          String         @db.VarChar(500)
+    fileSize	    Decimal        @db.Decimal(11,3)
+    remarks       String         @db.VarChar(1000) 
+    client        Client?        @relation(fields: [clientId], references:[id])
+    clientId  	  Int?  
+    dateOfCreated DateTime       @db.Timestamptz(3) @default(now())
+    dateOfUpdated DateTime?      @db.Timestamptz(3) @updatedAt
+    scriptStatus  ScriptStatus[]
+    sentence      Sentence[]
+
+    @@map("script")
+}
+
+model ScriptStatus {
+    id	               Int       @default(autoincrement()) @id
+    script	           Script?   @relation(fields: [scriptId], references: [id])
+    scriptId	         Int?      @db.Integer
+    post	             Boolean   @default(false)
+    deadline	         Boolean   @default(false)
+    downloadCount	     Int       @default(0)
+    client             Client?   @relation(fields: [clientId], references:[id])
+    clientId	         Int?  
+    downloadMax        Int?      @default(1)
+    downloadPreiodFrom DateTime? @db.Date    
+    downloadPreiodTo   DateTime? @db.Date
+    uploadStatus       String?   @db.VarChar(50)
+    dateOfCreated	     DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated	     DateTime? @db.Timestamptz(3) @updatedAt
+    
+    @@map("script_status")
+}
+
+model SentenceStatus {
+    id	           Int       @default(autoincrement()) @id
+    sentence       Sentence  @relation(fields: [sentenceId], references: [id])
+    sentenceId     Int      
+    deadlineStatus Boolean   @default(false)
+    dateOfCreated  DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated  DateTime? @db.Timestamptz(3) @updatedAt
+    
+    @@map("sentence_status")
+}
+
+model Sentence {
+    id             Int       @default(autoincrement()) @id
+    script	       Script    @relation(fields: [scriptId], references: [id])
+    scriptId       Int      
+    context	       String    @db.VarChar(5000)
+    language       String    @db.VarChar(50)
+    age	           Int?      
+    gender         String?   @db.VarChar(50)
+    dateOfCreated  DateTime  @db.Timestamptz(3) @default(now())
+    dateOfUpdated  DateTime? @db.Timestamptz(3) @updatedAt
+    voice	         Voice[]    
+    sentenceStatus SentenceStatus[]
+
+    @@map("sentence")
+}
+
+model Client {
+  id                  Int      @id @default(autoincrement())
+  loginId             String   @unique
+  clientName          String
+  remarks             String?  @db.Text
+  dateOfCreated       DateTime @default(now())
+  dateOfUpdated       DateTime @updatedAt
+  password            String
+  role                Role     @default(CLIENT)
+  script              Script[]
+  scriptStatus        ScriptStatus[]
+  voiceDownloadStatus VoiceDownloadStatus[]
+
+  @@map("client")
+}
+
+model User {
+  id                 Int      @id @default(autoincrement())
+  loginId            String   @unique
+  firstName          String
+  middleName         String?
+  lastName           String
+  gender             Gender
+  dateOfCreated      DateTime @default(now())
+  dateOdUpdated      DateTime @updatedAt
+  status             Boolean  @default(false)
+  birthday           String
+  password           String
+  role               Role     @default(USER)
+  languages          String
+  voiceVeriftyStatus VoiceVeriftyStatus[]
+  voice              Voice[]
+
+  @@map("user")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NEUTRAL
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+  USER
+}
+
+enum Status {
+  NONE
+  CONFIRM
+  REJECT
 }
