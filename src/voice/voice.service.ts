@@ -148,5 +148,19 @@ export class VoiceService {
         })
         return verifyStatus;
     }
-       
+
+    async ConfirmVoice (voice_verify_status_id:number): Promise<any> {
+        const voiceVeriftyStatus = await this.prisma.voiceVeriftyStatus.findUnique({
+          where : {id : voice_verify_status_id}
+        })
+        if (!voiceVeriftyStatus) {
+          throw await new HttpException({ MESSAGE: 'PLEASE CREATE VOICE VERIFY STATUS'}, 400);;
+        }
+  
+        const voiceStatus = await this.prisma.voiceVeriftyStatus.update({
+          where : {id           : voice_verify_status_id},
+          data  : {verifyStatus : 'CONFIRM'},
+        })
+        return voiceStatus;
+    }
 }
