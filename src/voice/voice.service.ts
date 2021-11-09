@@ -123,5 +123,30 @@ export class VoiceService {
           throw await new HttpException({ MESSAGE: 'VOICE DOES NOT EXIST' }, 404);
         }
         return voices[voice_index];
-      }   
+    }
+
+    async VerifyStatus (voice_id:number): Promise<any> {
+        const voice = await this.prisma.voice.findUnique({
+          where: {id : voice_id}
+        })
+  
+        if (!voice) {
+          throw await new HttpException({ MESSAGE: 'VOICE DOES NOT EXIST' }, 404);
+        }
+        
+        const getvoiceStatus = await this.prisma.voiceVeriftyStatus.findUnique({
+          where: {voiceId : voice_id}
+        })
+        
+        if (!getvoiceStatus) {
+          throw await new HttpException({ MESSAGE: 'PLEASE CREATE VOICE VERIFY STATUS'}, 400);;
+        }
+  
+        const verifyStatus = await this.prisma.voice.findUnique({
+          where  : {id                 : voice_id},
+          select : {voiceVeriftyStatus : true}
+        })
+        return verifyStatus;
+    }
+       
 }

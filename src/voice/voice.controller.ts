@@ -14,12 +14,17 @@ export class VoiceController {
     }
       
     @Post(':voice_id/play_count')
-    async  PlayCountOfVoice(@Param('voice_id') voice_id:number, @Query('user_id') user_id:number): Promise<any>{
+    async PlayCountOfVoice(@Param('voice_id') voice_id:number, @Query('user_id') user_id:number): Promise<any>{
         return await this.voiceService.PlayCountOfVoice(voice_id, user_id);
     }
 
     @Get("verify")
     async GetVerifySentence(@Query('userId') userId: number): Promise<any> {
         return await this.voiceService.GetVerifyVoice(userId);
+    }
+
+    @Get(':voice_id/verify_status')
+    async VerifyStatus(@Param('voice_id') voice_id:number): Promise<any>{
+        return await this.voiceService.VerifyStatus(voice_id);
     }
 }
