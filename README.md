@@ -48,11 +48,11 @@
 
 [post] playCountOfVoice  : /voice/upload?sentence_id= <br>
 
-[post] confirmVoice      : /voice/verify/<int:voice_verify_status_id>/confirm <br>
+[post] confirmVoice      : /voice/verify/\<int:voice_verify_status_id>/confirm <br>
 
-[post] rejectVoice       : /voice/verify/<int:voice_verify_status_id>/reject <br>
+[post] rejectVoice       : /voice/verify/\<int:voice_verify_status_id>/reject <br>
 
-[get] verifyStatus       : /voice/<int:voice_id>/verify_status <br>
+[get] verifyStatus       : /voice/\<int:voice_id>/verify_status <br>
 
 [get] getVerifySentence  : /voice/verify
 
@@ -63,5 +63,5 @@
 
 ## 레퍼런스
 
-- 이 프로젝트는 본인이 (주)글로컬라이즈 인터쉽 기간 동안 진행한 `글로보이스` 프로젝트이며, 글로컬라이즈의 동의하에 코드를 오픈합니다.
+- 이 프로젝트는 본인이 (주)글로컬라이즈 인터쉽 기간 동안 진행한 `글로보이스` 프로젝트의 일부 소스코드이며, 글로컬라이즈의 동의하에 코드를 오픈합니다.
 - 이 프로젝트의 저작권은 글로컬라이즈에 있으므로 해당 프로젝트를 통해 이득을 취하거나 무단 배포할 경우 법적으로 문제될 수 있습니다.
