@@ -32,4 +32,9 @@ export class VoiceController {
     async ConfirmVoice(@Param('voice_verify_status_id') voice_verify_status_id:number): Promise<any>{
         return await this.voiceService.ConfirmVoice(voice_verify_status_id);
     }
+
+    @Post('verify/:voice_verify_status_id/reject')
+    async RejectVoice(@Param('voice_verify_status_id') voice_verify_status_id:number): Promise<any>{
+        return await this.voiceService.RejectVoice(voice_verify_status_id);
+    }
 }
