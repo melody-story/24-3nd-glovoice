@@ -19,7 +19,7 @@ export class VoiceController {
     }
 
     @Get("verify")
-    async GetVerifySentence(@Query('userId') userId: number): Promise<any> {
+    async GetVerifyVoice(@Query('userId') userId: number): Promise<any> {
         return await this.voiceService.GetVerifyVoice(userId);
     }
 
