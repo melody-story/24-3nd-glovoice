@@ -92,4 +92,36 @@ export class VoiceService {
         })
         return voiceStatus;
     }
+
+    async GetVerifyVoice(user_id:number):Promise<any> {
+        const user = await this.prisma.user.findUnique({
+          where : {id        : user_id},
+          select: {languages : true},
+        });
+        
+        if (!user) {
+          throw await new HttpException({ MESSAGE: 'USER DOES NOT EXIST' }, 404);
+        }
+        
+        let voices = []
+        voices = await this.prisma.voice.findMany({
+          where: {
+            NOT: {userId : user_id},
+          },
+          select: {
+            id          : true,
+            url         : true,
+            sentenceId  : true,
+            userId      : true,
+          },
+          orderBy: {id: "asc"},
+        });
+        
+        const voice_index = Math.floor(Math.random() * voices.length)
+        
+        if (!voices[voice_index]) {
+          throw await new HttpException({ MESSAGE: 'VOICE DOES NOT EXIST' }, 404);
+        }
+        return voices[voice_index];
+      }   
 }

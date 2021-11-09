@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Param, Post, Query, UploadedFile, UseInterceptors, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { VoiceService } from './voice.service';
 
@@ -14,7 +14,12 @@ export class VoiceController {
     }
       
     @Post(':voice_id/play_count')
-    async  playCountOfVoice(@Param('voice_id') voice_id:number, @Query('user_id') user_id:number): Promise<any>{
+    async  PlayCountOfVoice(@Param('voice_id') voice_id:number, @Query('user_id') user_id:number): Promise<any>{
         return await this.voiceService.PlayCountOfVoice(voice_id, user_id);
+    }
+
+    @Get("verify")
+    async GetVerifySentence(@Query('userId') userId: number): Promise<any> {
+        return await this.voiceService.GetVerifyVoice(userId);
     }
 }
