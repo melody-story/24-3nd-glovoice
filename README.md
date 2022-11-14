@@ -1,9 +1,17 @@
 ## Project name : Glovoice | 글로보이스
 - 소개: 음성 클라우드 소싱 어플리케이션
 
+
+## 팀구성
+- Back-end: 손명희, 김영호, 신우주 
+- Front-end: 김세준, 조성환
+<img src='./wecode.JPG' alt='wecode' width="400" height="300"> 
+
+
 ## 개발 기간
 
 - 기간: 2021.10.05 ~ 2021.10.28 (24일)
+
 
 ## 적용 기술
 
